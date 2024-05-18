@@ -45,7 +45,6 @@ def max_flow(G: nx.Graph, s: any, t: any) -> int:
     size = max([int(i) for i in G.nodes()]) + 1
     C = [[0] * size for i in range(size)]
     F = [[0] * size for i in range(size)]
-
     for u, v, data in G.edges(data=True):
         C[int(u)][int(v)] = data['weight']
     value: int = 0

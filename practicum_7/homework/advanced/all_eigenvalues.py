@@ -36,29 +36,26 @@ class Performance:
     time: float = 0.0
     relative_error: float = 0.0
 
+
+
 def get_all_eigenvalues(A: NDArrayFloat) -> NDArrayFloat:
-    A = np.copy(A)
-    n = A.shape[0]
-    Q = np.zeros_like(A)
-    R = np.zeros((A.shape[1], A.shape[1]))
-    n_iters = 50
-
-    for i in range(A.shape[1]):
-        v = A[:, i]
-
+    matrix = np.array(A, dtype=float)
+    dim = matrix.shape[0]
+    orthogonal_matrix = np.zeros_like(matrix)
+    upper_triangle = np.zeros((matrix.shape[1], matrix.shape[1]))
+    iterations = 50
+    for i in range(matrix.shape[1]):
+        vec = matrix[:, i]
         for j in range(i):
-            R[j, i] = Q[:, j] @ A[:, i]
-            v = v - R[j, i] * Q[:, j]
+            upper_triangle[j, i] = orthogonal_matrix[:, j] @ matrix[:, i]
+            vec -= upper_triangle[j, i] * orthogonal_matrix[:, j]
 
-        R[i, i] = np.linalg.norm(v)
-        Q[:, i] = v / R[i, i]
-
-    for _ in range(n_iters):
-        A = R @ Q
-    eigenvalues = np.diag(A)
-
-    return eigenvalues
-
+        upper_triangle[i, i] = np.linalg.norm(vec)
+        orthogonal_matrix[:, i] = vec / upper_triangle[i, i]
+    for _ in range(iterations):
+        matrix = upper_triangle @ orthogonal_matrix
+    eigen_vals = np.diag(matrix)
+    return eigen_vals
 def run_test_cases(
     path_to_homework: str, path_to_matrices: str
 ) -> dict[str, Performance]:

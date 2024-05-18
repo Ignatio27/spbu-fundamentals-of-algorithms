@@ -2,7 +2,7 @@ import os
 
 import networkx as nx
 
-TEST_GRAPH_FILES = ["graph_1_wo_cycles.edgelist", "graph_2_wo_cycles.edgelist", "graph_3_w_cycles.edgelist"]
+TEST_GRAPH_FILES = ["graph_1_wo_cycles.edgelist", "graph_2_wo_cycles.edgelist", "graph_3_wo_cycles.edgelist"]
 
 def has_cycles(g: nx.DiGraph):
     rec_stack = set()
@@ -32,10 +32,8 @@ def has_cycles(g: nx.DiGraph):
 
 if __name__ == "__main__":
     for filename in TEST_GRAPH_FILES:
-        # Load the graph
-        G = nx.read_edgelist(f"practicum_2/homework/advanced/{filename}", create_using=nx.DiGraph)
+        G = nx.read_edgelist(f"/Users/ignat/Desktop/pershin_homework/spbu-fundamentals-of-algorithms/practicum_2/homework/advanced/{filename}", create_using=nx.DiGraph)
         G = nx.read_edgelist(
-            os.path.join("practicum_2", "homework", filename), create_using=nx.DiGraph
+            os.path.join("/Users","ignat","Desktop","pershin_homework","spbu-fundamentals-of-algorithms","practicum_2", "homework", "advanced",filename), create_using=nx.DiGraph
         )
-        # Output whether it has cycles
         print(f"Graph {filename} has cycles: {has_cycles(G)}")
