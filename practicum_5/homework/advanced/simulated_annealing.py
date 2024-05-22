@@ -22,7 +22,7 @@ def set_colors(G, colors):
         G.nodes[n]["color"] = color
 
 
-def modify_colors(current_colors, max_colors):
+def modify_colors(G, current_colors, max_colors):
     upd_colors = current_colors.copy()
     r_node = np.random.choice(list(G.nodes()))
     adjacent_nodes = list(G.neighbors(r_node))
@@ -43,11 +43,11 @@ def solve_via_simulated_annealing(G, n_max_colors, initial_colors, n_iters):
     for i in range(n_iters):
         cur_loss = number_of_conflicts(G, cur_colors)
         loss_history[i] = cur_loss
-        next_best_colors = modify_colors(cur_colors, n_max_colors)
+        next_best_colors = modify_colors(G,cur_colors, n_max_colors)
         next_best_loss = number_of_conflicts(G, next_best_colors)
 
         for _ in range(n_tweaks):
-            next_colors = modify_colors(cur_colors, n_max_colors)
+            next_colors = modify_colors(G,cur_colors, n_max_colors)
             next_loss = number_of_conflicts(G, next_colors)
             if _ > 1:
                 next_t = 1 / np.log(_)
@@ -61,7 +61,7 @@ def solve_via_simulated_annealing(G, n_max_colors, initial_colors, n_iters):
             cur_t = 1 / np.log(i)
         else:
             cur_t = 1
-        if next_best_loss < cur_loss or rng.random() < math.exp((next_best_loss - cur_loss) / cur_t):
+        if (next_best_loss < cur_loss or rng.random() < math.exp((next_best_loss - cur_loss) / cur_t)):
             cur_colors = next_best_colors
 
         if loss_history[i] == max(set(loss_history), key=list(loss_history).count):
